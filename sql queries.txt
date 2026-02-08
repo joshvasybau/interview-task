@@ -1,0 +1,161 @@
+-- DATABASE
+--=============================== 
+CREATE DATABASE IF NOT EXISTS rbac_system;
+USE rbac_system;
+
+-- ROLES
+--===============================
+CREATE TABLE roles (
+    id INT PRIMARY KEY AUTO_INCREMENT,
+    name VARCHAR(50) NOT NULL UNIQUE
+);
+
+INSERT INTO roles (id, name) VALUES
+(1, 'admin'),
+(2, 'manager'),
+(3, 'cashier'),
+(4, 'support'),
+(5, 'auditor');
+
+ --USERS
+--===============================
+CREATE TABLE users (
+    id INT PRIMARY KEY AUTO_INCREMENT,
+    username VARCHAR(50) NOT NULL UNIQUE,
+    password VARCHAR(100) NOT NULL,
+    role_id INT,
+    is_admin BOOLEAN DEFAULT FALSE,
+    FOREIGN KEY (role_id) REFERENCES roles(id)
+);
+
+INSERT INTO users (username, password, role_id, is_admin) VALUES
+('admin_boss', 'admin123', 1, TRUE),
+('manager1', 'pass123', 2, FALSE),
+('manager2', 'pass123', 2, FALSE),
+('cashier1', 'pass123', 3, FALSE),
+('cashier2', 'pass123', 3, FALSE),
+('support1', 'pass123', 4, FALSE),
+('support2', 'pass123', 4, FALSE),
+('auditor1', 'pass123', 5, FALSE),
+('auditor2', 'pass123', 5, FALSE);
+
+  --PERMISSIONS (RBAC CONFIG)
+--===============================
+CREATE TABLE permissions (
+    id INT PRIMARY KEY AUTO_INCREMENT,
+    role_id INT,
+    table_name VARCHAR(50),
+    permissions JSON,
+    FOREIGN KEY (role_id) REFERENCES roles(id)
+);
+
+INSERT INTO permissions (role_id, table_name, permissions) VALUES
+
+-- MANAGER
+(2, 'customers', '{
+  "table": {"view": true, "edit": true},
+  "fields": {
+    "ssn": {"view": false, "edit": false},
+    "name": {"view": true, "edit": true},
+    "email": {"view": true, "edit": true},
+    "phone": {"view": true, "edit": true}
+  }
+}'),
+
+-- CASHIER
+(3, 'accounts', '{
+  "table": {"view": true, "edit": true},
+  "fields": {
+    "balance": {"view": true, "edit": true},
+    "account_number": {"view": true, "edit": false}
+  }
+}'),
+
+-- SUPPORT
+(4, 'customers', '{
+  "table": {"view": true, "edit": false},
+  "fields": {
+    "ssn": {"view": false, "edit": false},
+    "name": {"view": true, "edit": false},
+    "email": {"view": true, "edit": false},
+    "phone": {"view": true, "edit": false}
+  }
+}'),
+
+-- AUDITOR
+(5, 'transactions', '{
+  "table": {"view": true, "edit": false},
+  "fields": {
+    "type": {"view": true, "edit": false},
+    "amount": {"view": true, "edit": false},
+    "created_at": {"view": true, "edit": false}
+  }
+}');
+
+
+-- CUSTOMERS
+--===============================
+CREATE TABLE customers (
+    id INT PRIMARY KEY AUTO_INCREMENT,
+    name VARCHAR(50),
+    email VARCHAR(100),
+    phone VARCHAR(15),
+    ssn VARCHAR(20)
+);
+
+INSERT INTO customers (name, email, phone, ssn) VALUES
+('vetri', 'vetri@mail.com', '900000001', 'SSN001'),
+('jerin', 'jerin12@mail.com', '900000002', 'SSN002'),
+('nisha', 'nisha@mail.com', '900000003', 'SSN003'),
+('annie', 'annie76@mail.com', '900000004', 'SSN004'),
+('Eve', 'eve@mail.com', '900000005', 'SSN005'),
+('aruna', 'aruna46@mail.com', '900000006', 'SSN006'),
+('ria', 'riasybau@mail.com', '900000007', 'SSN007'),
+('avan', 'avan3@mail.com', '900000008', 'SSN008'),
+('ivan', 'ivan@mail.com', '900000009', 'SSN009'),
+('simbu', 'simbu12@mail.com', '900000010', 'SSN010');
+
+ --ACCOUNTS
+===============================
+CREATE TABLE accounts (
+    id INT PRIMARY KEY AUTO_INCREMENT,
+    customer_id INT,
+    account_number VARCHAR(20),
+    balance DECIMAL(10,2),
+    FOREIGN KEY (customer_id) REFERENCES customers(id)
+);
+
+INSERT INTO accounts (customer_id, account_number, balance) VALUES
+(1, 'ACC100001', 55000),
+(2, 'ACC100002', 72000.50),
+(3, 'ACC100003', 15000.75),
+(4, 'ACC100004', 98000),
+(5, 'ACC100005', 42000.25),
+(6, 'ACC100006', 30000),
+(7, 'ACC100007', 86000.80),
+(8, 'ACC100008', 12000.60),
+(9, 'ACC100009', 45000),
+(10, 'ACC100010', 99000.90);
+
+ --TRANSACTIONS
+--================================
+CREATE TABLE transactions (
+    id INT PRIMARY KEY AUTO_INCREMENT,
+    account_id INT,
+    amount DECIMAL(10,2),
+    type VARCHAR(10),
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    FOREIGN KEY (account_id) REFERENCES accounts(id)
+);
+
+INSERT INTO transactions (account_id, amount, type) VALUES
+(1, 5000, 'credit'),
+(1, 1200, 'debit'),
+(2, 8000, 'credit'),
+(2, 2000, 'debit'),
+(3, 3000, 'credit'),
+(3, 500, 'debit'),
+(4, 10000, 'credit'),
+(5, 2500, 'debit'),
+(6, 7000, 'credit'),
+(7, 4000, 'debit');
