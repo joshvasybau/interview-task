@@ -143,13 +143,5 @@ Password: auditor123
   <li>HTML, CSS, JavaScript</li>
   <li>REST APIs</li>
 </ul>
-
-<h2>Security Note</h2>
-<p>
-Database credentials are not included for security reasons.
-Please update your local MySQL username and password in
-<code>db/mysql.go</code> before running the project.
-</p>
-
 </body>
 </html>
