@@ -143,6 +143,7 @@ Password: auditor123
   <li>HTML, CSS, JavaScript</li>
   <li>REST APIs</li>
 </ul>
+<h2>sql query file</h2>
 <p>
 use the sql text file if needed to create sql data base
 </p>
