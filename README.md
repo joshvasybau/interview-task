@@ -5,42 +5,6 @@
 <meta charset="UTF-8">
 <title>Config-Driven Access Control System (RBAC)</title>
 
-<style>
-  body {
-    font-family: Arial, Helvetica, sans-serif;
-    line-height: 1.6;
-    margin: 40px;
-    color: #222;
-  }
-
-  h1, h2, h3 {
-    color: #111;
-  }
-
-  h1 {
-    border-bottom: 2px solid #ddd;
-    padding-bottom: 10px;
-  }
-
-  code, pre {
-    background: #f5f5f5;
-    padding: 10px;
-    display: block;
-    border-radius: 5px;
-    overflow-x: auto;
-  }
-
-  ul {
-    margin-left: 20px;
-  }
-
-  .note {
-    background: #fff8e1;
-    padding: 12px;
-    border-left: 4px solid #f0b429;
-    margin: 20px 0;
-  }
-</style>
 </head>
 
 <body>
